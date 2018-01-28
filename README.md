@@ -4,7 +4,9 @@ This is a fork of the [React-Two-Way-Querybuilder](https://github.com/Lefortov/r
 
 The modified component can now accept an additional select field along with the standard three fields in rule 
 
-![image](https://github.com/Navi-nk/react-two-way-querybuilder/tree/master/blob/builder-1.png) 
+<p align="center">
+  <img src="https://github.com/Navi-nk/react-two-way-querybuilder/tree/master/blob/builder-1.png" alt="Pages"/>
+</p>
 
 ## Usage
 ```
@@ -36,8 +38,5 @@ The modified component can now accept an additional select field along with the 
 
 export default App;
 ```
-##License
-
-React-two-way-quierybuidler is MIT licensed
 
 
