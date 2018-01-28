@@ -4,7 +4,7 @@ This is a fork of the [React-Two-Way-Querybuilder](https://github.com/Lefortov/r
 
 The modified component can now accept an additional select field along with the standard three fields in rule 
 
-![image](https://github.com/Navi-nk/react-two-way-querybuilder/tree/master/blob/builder-1.jpg) 
+![image](https://github.com/Navi-nk/react-two-way-querybuilder/tree/master/blob/builder-1.png) 
 
 ## Usage
 ```
@@ -20,7 +20,7 @@ The modified component can now accept an additional select field along with the 
     const config = {
       query: "((Weight='90 : kg' AND Height='1.9 : meter') AND BMI='26 : kg/m2')",
     };
-    
+
     class App extends Component {
  
         handleChange(event) {
