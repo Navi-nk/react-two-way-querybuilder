@@ -18,13 +18,23 @@ class Rule extends React.Component {
     this.onFieldChanged = this.onFieldChanged.bind(this);
     this.onOperatorChanged = this.onOperatorChanged.bind(this);
     this.onInputChanged = this.onInputChanged.bind(this);
+    this.onUnitChanged= this.onUnitChanged.bind(this); 
     this.getInputTag = this.getInputTag.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.treeHelper = new TreeHelper(this.props.data);
     this.node = this.treeHelper.getNodeByName(this.props.nodeName);
     this.styles = this.props.styles;
+    
+    //logic to create correct rule object with proper units
+    var field = this.props.fields.filter((f)=>{
+      if(f.name === this.node.field){
+        return f;
+      }
+    });
+    field = (field.length == 1)? field[0] : this.props.fields[0];
+
     this.state = {
-      currField: this.generateRuleObject(this.props.fields[0], this.node),
+      currField: this.generateRuleObject(field, this.node),
       validationError: false,
     };
   }
@@ -43,6 +53,15 @@ class Rule extends React.Component {
 
   onOperatorChanged(event) {
     this.node.operator = event.target.value;
+    const field = this.getFieldByName(this.node.field);
+    const rule = this.generateRuleObject(field, this.node);
+    this.setState({ currField: rule });
+    this.props.onChange();
+  }
+
+  //handler for unit select
+  onUnitChanged(event) {
+    this.node.unit = event.target.value;
     const field = this.getFieldByName(this.node.field);
     const rule = this.generateRuleObject(field, this.node);
     this.setState({ currField: rule });
@@ -105,6 +124,7 @@ class Rule extends React.Component {
   generateRuleObject(field, node) {
     const rule = {};
     rule.input = field.input;
+    rule.unitInput = field.unitInput;
     node = node ? node : this.treeHelper.getNodeByName(this.props.nodeName);
     rule.input.value = node.value;
     if (!field.operators || typeof (field.operators) === 'string') {
@@ -150,6 +170,15 @@ class Rule extends React.Component {
           )}
         </select>
         {this.getInputTag(this.state.currField.input.type)}
+        {/* added unit select field*/}
+        <select
+          value={this.node.unit}
+          className={this.styles.select}
+          onChange={this.onUnitChanged}
+        >{this.state.currField.unitInput.map((unit, index) =>
+          <option value={unit} key={index}>{unit}</option>
+        )}
+        </select>
         <button
           className={this.styles.deleteBtn}
           onClick={this.handleDelete}

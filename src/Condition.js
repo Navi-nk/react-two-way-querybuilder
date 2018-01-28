@@ -26,6 +26,7 @@ class Condition extends React.Component {
       field: this.props.fields[0].name,
       operator: this.props.config.operators[0].operator,
       value: '',
+      unit:this.props.fields[0].unitInput[0],
       nodeName });
     this.setState({ data });
     this.props.onChange(this.props.data);
@@ -59,6 +60,7 @@ class Condition extends React.Component {
   }
 
   render() {
+    
     return (
       <div className={this.styles.condition}>
         <select value={this.state.data.combinator} className={this.styles.select} onChange={this.combinatorChange}>

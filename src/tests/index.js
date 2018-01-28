@@ -26,7 +26,7 @@ const operators = [
 describe('Query Parser', function () {
   describe('GetCombinatorsIndexes', function () {
     it('should return AND and OR substrings', function () {
-      const query = "((Firstname='kek' AND Firstname='kek1') OR Firstname='Kek3')";
+      const query = "((Speed='10 : m/s' AND Mass='30 : kg') OR Acceleration='50 : m/s*s')";
       const result = QueryParser.getCombinatorsIndexes(query, combinators);
       const expectedFirstOeprator = query.substr(result[0].start, result[0].end - result[0].start);
       const expectedSecondOperator = query.substr(result[1].start, result[1].end - result[1].start);
@@ -37,27 +37,28 @@ describe('Query Parser', function () {
 
   describe('GetTokenObject', function () {
     it('should return token object', function () {
-      const token = "Firstname='kek'";
+      const token = "Acceleration='20 : m/s*s'";
       const result = QueryParser.createTokenObject(token, operators);
-      assert.equal(result.field, 'Firstname');
+      assert.equal(result.field, 'Acceleration');
       assert.equal(result.operator, '=');
-      assert.equal(result.value, "'kek'");
+      assert.equal(result.value, "20");
+      assert.equal(result.unit, "m/s*s");
     });
   });
 
   describe('Get tokens array', function () {
     it('should return token array', function () {
-      const query = "((Firstname='kek' AND Firstname='kek1') OR Firstname='kek3')";
+      const query = "((Speed='10 : m/s' AND Mass='30 : kg') OR Acceleration='50 : m/s*s')";
       const result = QueryParser.getTokensArray(query, combinators, operators);
       const expectedResult = [
         '(',
         '(',
-        { field: 'Firstname', operator: '=', value: "'kek'" },
+        { field: 'Speed', operator: '=', value: "10", unit:'m/s'},
         'AND',
-        { field: 'Firstname', operator: '=', value: "'kek1'" },
+        { field: 'Mass', operator: '=', value: "30", unit:'kg'},
         ')',
         'OR',
-        { field: 'Firstname', operator: '=', value: "'kek3'" },
+        { field: 'Acceleration', operator: '=', value: "50", unit:'m/s*s' },
         ')',
       ];
       assert.deepEqual(result, expectedResult);
@@ -66,12 +67,12 @@ describe('Query Parser', function () {
 
   describe('get first combinator', function () {
     it('should return AND', function () {
-      const query = "((Firstname='kek' AND Firstname='kek1'))";
+      const query = "((Speed='10 : m/s' AND Mass='30 : kg'))";
       const tokens = QueryParser.getTokensArray(query, combinators, operators);
       const tree = ASTree.buildTree(tokens, combinators);
       const expectedResult = 'AND';
       const result = QueryParser.getFirstCombinator(tree, combinators);
-      assert.equal(result, expectedResult);
+      assert.equal(result._value, expectedResult);
     });
   });
 });

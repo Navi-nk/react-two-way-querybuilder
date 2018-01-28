@@ -7,7 +7,7 @@ export default class QueryParser {
     query = '(';
     for (let i = 0, length = data.rules.length; i < length; i += 1) {
       if (!data.rules[i].combinator) {
-        query += `${data.rules[i].field} ${data.rules[i].operator} '${data.rules[i].value}'`;
+        query += `${data.rules[i].field} ${data.rules[i].operator} '${data.rules[i].value}' '${data.rules[i].unit}'`; //added unit to rule
         if (i !== length - 1 && !data.rules[i + 1].combinator) {
           query += ` ${data.combinator} `;
         }
@@ -47,6 +47,7 @@ export default class QueryParser {
         field: element.value.field,
         operator: element.value.operator,
         value: element.value.value,
+        unit: element.value.unit,  //added unit to rule
         nodeName,
       };
       currElement.rules.push(newRule);
@@ -91,10 +92,14 @@ export default class QueryParser {
     const matches = this.matchAll(token, operatorsPattern);
     const mathesLength = matches.map(el => el.value).join('').length;
     const operatorEndIndex = matches[0].index + mathesLength;
+    //the unit will be appended to input field delimited by ":"
+    const valueNunit = token.substring(operatorEndIndex, token.length).replace(/[']+/g, '').split(' : ');
+
     return {
       field: token.substring(0, matches[0].index),
       operator: token.substring(matches[0].index, operatorEndIndex),
-      value: token.substring(operatorEndIndex, token.length).replace(/[']+/g, ''),
+      value: valueNunit[0],
+      unit: valueNunit[1]
     };
   }
 
