@@ -31,3 +31,4 @@ lib-cov
 coverage
 coverage.html
 .cover*
+package-lock.json

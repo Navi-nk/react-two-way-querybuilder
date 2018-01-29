@@ -7,7 +7,7 @@ export default class QueryParser {
     query = '(';
     for (let i = 0, length = data.rules.length; i < length; i += 1) {
       if (!data.rules[i].combinator) {
-        query += `${data.rules[i].field} ${data.rules[i].operator} '${data.rules[i].value}' '${data.rules[i].unit}'`; //added unit to rule
+        query += `${data.rules[i].field}${data.rules[i].operator}'${data.rules[i].value} : ${data.rules[i].unit}'`; //added unit to rule
         if (i !== length - 1 && !data.rules[i + 1].combinator) {
           query += ` ${data.combinator} `;
         }
