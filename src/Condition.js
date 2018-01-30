@@ -6,11 +6,9 @@ import Rule from './Rule';
 class Condition extends React.Component {
   constructor(props) {
     super(props);
+    
     this.treeHelper = new TreeHelper(this.props.data);
     this.node = this.treeHelper.getNodeByName(this.props.nodeName);
-    this.state = {
-      data: this.node,
-    };
     this.addRule = this.addRule.bind(this);
     this.addCondition = this.addCondition.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -19,9 +17,14 @@ class Condition extends React.Component {
     this.styles = this.props.config.styles;
   }
 
+  //added to fix bug : null expection when we delete a top level node; data was set appropriately
+  componentWillReceiveProps(nextProps) {
+    this.node = this.treeHelper.getNodeByName(nextProps.nodeName);
+  }
+
   addRule() {
-    const data = this.state.data;
-    const nodeName = this.treeHelper.generateNodeName(this.state.data);
+    const data = this.node;
+    const nodeName = this.treeHelper.generateNodeName(this.node);
     data.rules.push({
       field: this.props.fields[0].name,
       operator: this.props.config.operators[0].operator,
@@ -29,28 +32,31 @@ class Condition extends React.Component {
       unit:this.props.fields[0].unitInput[0],
       nodeName });
     this.setState({ data });
+    this.node = data;
     this.props.onChange(this.props.data);
   }
 
   addCondition() {
-    const data = this.state.data;
-    const nodeName = this.treeHelper.generateNodeName(this.state.data);
+    const data = this.node;
+    const nodeName = this.treeHelper.generateNodeName(this.node);
     data.rules.push({
       combinator: this.props.config.combinators[0].combinator,
       nodeName,
       rules: [] });
     this.setState({ data });
+    this.node = data;
     this.props.onChange(this.props.data);
   }
 
   handleDelete(nodeName) {
-    this.treeHelper.removeNodeByName(nodeName);
+    const node = this.treeHelper.removeNodeByName(nodeName);
     this.props.onChange(this.props.data);
   }
 
   handleChildUpdate() {
     const node = this.treeHelper.getNodeByName(this.props.nodeName);
     this.setState({ data: node });
+    this.node = node;
     this.props.onChange(this.props.data);
   }
 
@@ -60,10 +66,9 @@ class Condition extends React.Component {
   }
 
   render() {
-    
     return (
       <div className={this.styles.condition}>
-        <select value={this.state.data.combinator} className={this.styles.select} onChange={this.combinatorChange}>
+        <select value={this.node.combinator} className={this.styles.select} onChange={this.combinatorChange}>
           {this
             .props
             .config
@@ -84,8 +89,7 @@ class Condition extends React.Component {
             className={this.styles.deleteBtn}>{this.props.buttonsText.delete}</button>
           : null}
         {this
-          .state
-          .data
+          .node
           .rules
           .map((rule, index) => {
             if (rule.field) {
