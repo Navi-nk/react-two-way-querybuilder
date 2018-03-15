@@ -41,7 +41,7 @@ class Rule extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.node = this.treeHelper.getNodeByName(nextProps.nodeName);
-    this.setCurrentField();
+    this.setCurrentField();  //when a delete is done then the current field state has to be reassigned to new field
   }
 
   setCurrentField(){

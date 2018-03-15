@@ -3,6 +3,8 @@ export default class TreeHelper {
     this.data = data;
   }
 
+  //this is changed as earlier the new node number was taken as max of rules array + 1 which will cause conflict if 
+  // any rule apart from the last gets deleted
   generateNodeName(node) {
     var childNodeName = node.rules[node.rules.length - 1].nodeName;
     var childNodeNumber = childNodeName.split('/').splice(-1)[0];
