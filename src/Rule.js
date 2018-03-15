@@ -41,6 +41,13 @@ class Rule extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.node = this.treeHelper.getNodeByName(nextProps.nodeName);
+    this.setCurrentField();
+  }
+
+  setCurrentField(){
+    const field = this.getFieldByName(this.node.field);
+    const rule = this.generateRuleObject(field, this.node);
+    this.setState({ currField: rule });
   }
 
   onFieldChanged(event) {

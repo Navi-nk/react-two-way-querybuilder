@@ -4,7 +4,11 @@ export default class TreeHelper {
   }
 
   generateNodeName(node) {
-    return `${node.nodeName}/${node.rules.length + 1}`;
+    var childNodeName = node.rules[node.rules.length - 1].nodeName;
+    var childNodeNumber = childNodeName.split('/').splice(-1)[0];
+    console.log('node name',Number(childNodeNumber))
+    //return `${node.nodeName}/${node.rules.length + 1}`;
+    return `${node.nodeName}/${childNodeNumber + 1}`;
   }
 
   removeNodeByName(index) {
