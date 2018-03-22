@@ -54,6 +54,7 @@ class Rule extends React.Component {
     this.node.field = event.target.value;
     const field = this.getFieldByName(event.target.value);
     const rule = this.generateRuleObject(field, this.node);
+    this.node.unit = field.unitInput[0];
     this.setState({ currField: rule });
     this.props.onChange();
   }
